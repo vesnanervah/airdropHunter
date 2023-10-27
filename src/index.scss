@@ -1,3 +1,9 @@
+@import './sass/colors';
+
 body {
-    background-color: blueviolet;
+    background-color: $body-bg;
+    font-family: 'Inter', sans-serif;
+    margin: 0px;
+    padding: 0px;
 }
+

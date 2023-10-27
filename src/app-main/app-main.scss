@@ -1,0 +1,22 @@
+.app__main {
+    margin: 0px auto;
+    width: 1296px;
+    
+    @media (max-width: 574px) {
+        width: 94%;
+    }
+
+    @media (min-width:575px) and (max-width: 979px) {
+        width: 550px;
+    }
+
+    @media (min-width:980px) and (max-width: 1199px) {
+        width: 696px;
+    }
+
+    @media (min-width:1200px) and (max-width: 1400px) {
+        width: 922px;
+    }
+
+ 
+}

@@ -1,0 +1,17 @@
+@import '../../sass/colors';
+
+.header__top-bar {
+    background-color: $blue-light;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .header__gh-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        text-decoration: none;
+        color: $white-xxl;
+    }
+}
