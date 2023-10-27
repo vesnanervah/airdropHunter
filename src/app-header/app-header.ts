@@ -12,7 +12,7 @@ export default class AppHeader extends BaseView {
         this.viewElem = this.createView();
     }
 
-    createView(): HTMLElement {
+    private createView(): HTMLElement {
         const wrapper = document.createElement('header');
         wrapper.className = 'app__header';
 

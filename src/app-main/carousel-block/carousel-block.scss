@@ -1,0 +1,30 @@
+@import '../../sass/colors';
+@import '../../sass/shadows';
+
+.carousel-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $white-xxl;
+    border-radius: 18px;
+    height: 70px;
+    padding: 0 26px;
+    box-shadow: $block-shadow;
+
+    .carousel-block__control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        background-color: $white-xl;
+        border: none;
+    }
+
+    .carousel-block__items {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+}
