@@ -1,7 +1,10 @@
 .app__main {
     margin: 0px auto;
     width: 1296px;
-    
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+
     @media (max-width: 574px) {
         width: 94%;
     }
