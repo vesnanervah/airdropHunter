@@ -3,10 +3,16 @@ import { BaseView } from "../../base-view/base-view";
 import { blockchainItems } from "./blockchain-items";
 
 export default class CarouselBlock extends BaseView {
-    
+    private carouselItems: HTMLElement[] = [];
+    private itemsListContainer: HTMLDivElement | undefined;
+    private itemsList: HTMLDivElement | undefined;
+    private GAP = 15;
+
     constructor() {
         super();
         this.viewElem = this.createElem();
+        requestAnimationFrame(() => this.fillCarousel());
+        window.addEventListener('resize', () => this.fillCarousel());
     }
 
     private createElem():HTMLElement {
@@ -17,7 +23,8 @@ export default class CarouselBlock extends BaseView {
         const items = this.createCarouselItems();
         center.className = 'carousel-block__center';
         wrapper.className = 'carousel-block';
-
+        this.itemsListContainer = center;
+        this.itemsList = items;
         center.appendChild(items);
         wrapper.append(
             leftControl,
@@ -36,14 +43,14 @@ export default class CarouselBlock extends BaseView {
         return wrapper;
     }
 
-    private createCarouselItems(): HTMLElement {
+    private createCarouselItems(): HTMLDivElement {
         const wrapper = document.createElement('div');
         wrapper.className = 'carousel-block__items';
         blockchainItems.forEach((item) => {
             const itemElem = this.createCarouselItem(item.hrefId, item.imgSrc);
             wrapper.appendChild(itemElem);
+            this.carouselItems.push(itemElem);
         });
-
         return wrapper;
     }
 
@@ -63,5 +70,17 @@ export default class CarouselBlock extends BaseView {
 
     private handleCarouselItemClick(refElem: HTMLElement) {
         // smooth scroll
+    }
+
+    //proper carousel work requires one more element inside, than user can view.
+    private fillCarousel(index = 0) {
+        console.log(index);
+        console.log(`container scroll is ${this.itemsListContainer.scrollWidth}`);
+        console.log()
+        if (this.itemsListContainer.offsetWidth + this.carouselItems[0].offsetWidth >= this.itemsList.scrollWidth) {
+            const clone = this.carouselItems[index].cloneNode(true);
+            this.itemsList.appendChild(clone);
+            this.fillCarousel(this.carouselItems[index + 1] ? index + 1 : 0);
+        }
     }
 }

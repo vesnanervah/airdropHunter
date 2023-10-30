@@ -28,11 +28,50 @@
                 color: $white-xxl;
             }
         }
+
+        @media (max-width: 979px) {
+            display: none;
+        }
+    }
+
+    .carousel-block__center {
+        width: 1140px;
+        overflow: hidden;
+
+        @media (min-width:1200px) and (max-width: 1400px) {
+            width: 920px;
+        }
+
+        @media (min-width:980px) and (max-width: 1199px) {
+            width: 535px;
+        }
+
+        @media (max-width: 979px) {
+            display: flex;
+            justify-content: center;
+        }
+
+        @media (max-width: 575px) {
+            width: 370px;
+        }
     }
 
     .carousel-block__items {
         display: flex;
         gap: 15px;
         align-items: center;
+        width: fit-content;
+    }
+
+    .carousel-block__item {
+        display: flex;
+        height: 40px;
+        width: 40px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @media (max-width: 979px) {
+        justify-content: center;
     }
 }
