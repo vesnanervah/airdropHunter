@@ -20,6 +20,14 @@
         height: 40px;
         background-color: $white-xl;
         border: none;
+        transition: all 100ms;
+
+        &:hover {
+            background-color: $hover-btn-color;
+            i {
+                color: $white-xxl;
+            }
+        }
     }
 
     .carousel-block__items {

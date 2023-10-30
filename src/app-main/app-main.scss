@@ -3,7 +3,7 @@
     width: 1296px;
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 40px;
 
     @media (max-width: 574px) {
         width: 94%;
@@ -18,7 +18,7 @@
     }
 
     @media (min-width:1200px) and (max-width: 1400px) {
-        width: 922px;
+        width: 1094px;
     }
 
  
