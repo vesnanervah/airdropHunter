@@ -1,6 +1,6 @@
 import './carousel-block.scss';
 import { BaseView } from "../../base-view/base-view";
-import { blockchainItems } from "../../data/blockchain-items";
+import { blockchainItems } from "./blockchain-items";
 
 export default class CarouselBlock extends BaseView {
     

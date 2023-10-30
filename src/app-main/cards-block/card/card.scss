@@ -1,0 +1,115 @@
+@import '../../../sass/colors';
+@import '../../../sass/shadows';
+
+.card {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background-color: $white-xxl;
+    justify-content: space-between;
+    height: 742px;
+    width: 416px;
+    align-items: center;
+    padding: 26px;
+    box-shadow: $card-shadow;
+
+    .card__top,
+    .card__bottom {
+        width: 100%;
+    }
+
+    .card__meet {
+        display: flex;
+        align-items: center;
+        gap:10px;
+        font-size: 18px;
+    }
+
+    .card__description {
+        text-align: start;
+        font-size: 18px;
+        color: $white-s;
+        line-height: 23.4px;
+        padding-top: 10px;
+        max-height: 122px;
+        overflow: hidden;
+    }
+
+    .card__cast {
+        border: solid 1px $white-s;
+        border-radius: 10px;
+        padding: 11px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .card__cast_source {
+        font-size: 15px
+    }
+
+    .card__cast_data {
+        display: flex;
+        gap: 56px;
+        line-height: 130%;
+        color: $black-s;
+    }
+
+    .card__expected_value,
+    .card__probability_value {
+        color: black;
+    }
+
+    .card__tariffs {
+        margin-top: 15px;
+    }
+
+    .card__tariffs_head {
+        font-size: 11px;
+        color: $black-s;
+        display: grid;
+        grid-template-columns: 5fr 6xfr;
+        padding: 0px 15px;
+        justify-items: start;
+    } 
+
+    .card__tarrifs_body {
+        margin-top: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .card__tariff {
+        background-color: $white-l;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        justify-items: center;
+        padding: 8px 0px;
+        border-radius: 5px;
+
+        a {
+            color: $blue;
+            text-decoration: none;
+            &:hover {
+                color: $hover-btn-color;
+            }
+        }
+    }
+
+    .card__buy {
+        height: 55px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $blue-light;
+        color: $white-xxl;
+        width: 100%;
+        border: none;
+        border-radius: 18px;
+        margin-top: 34px;
+
+    }
+
+}

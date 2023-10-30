@@ -1,7 +1,7 @@
 # This is a test task for AirDrop Hunter startup
 
 During task it is forbiden to use frameworks.
-Many of features in design are not described, yet exhist, like blockchains slider-carousel or news slider.
+Many of features in design are not described, yet exist, like blockchains slider-carousel or news slider.
 So i implemented them as i feel.
 
 

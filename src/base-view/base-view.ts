@@ -16,6 +16,7 @@ class BaseView {
     isHidden(): boolean {
         return this.viewElem.classList.contains('hidden');
     }
+    
 }
 
 export { BaseView }

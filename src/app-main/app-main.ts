@@ -2,10 +2,12 @@ import './app-main.scss';
 import { BaseView } from "../base-view/base-view";
 import CarouselBlock from './carousel-block/carousel-block';
 import NewsBlock from './news-block/news-block';
+import CardsBlock from './cards-block/cards-block';
 
 export default class AppMain extends BaseView {
     private carouselBlock = new CarouselBlock();
     private newsBlock = new NewsBlock();
+    private cardsBlock = new CardsBlock();
 
     constructor() {
         super();
@@ -18,7 +20,8 @@ export default class AppMain extends BaseView {
 
         wrapper.append(
             this.carouselBlock.getView(),
-            this.newsBlock.getView()
+            this.newsBlock.getView(),
+            this.cardsBlock.getView()
         );
         return wrapper;
     }
