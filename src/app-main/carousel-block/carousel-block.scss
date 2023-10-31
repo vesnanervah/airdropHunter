@@ -72,6 +72,10 @@
         gap: 15px;
         align-items: center;
         width: fit-content;
+        &.animated {
+            transition: transform 200ms;
+        }
+
     }
 
     .carousel-block__item {
