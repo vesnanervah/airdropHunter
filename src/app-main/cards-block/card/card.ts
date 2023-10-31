@@ -1,14 +1,14 @@
 import { BaseView } from '../../../base-view/base-view';
-import { CardData } from '../cards-data';
+import { Blockchain } from '../../../data/blockchains';
 import './card.scss';
 
 export default class Card extends BaseView {
-    constructor(data: CardData) {
+    constructor(data: Blockchain) {
         super();
         this.viewElem = this.createElem(data);
     }
 
-    private createElem(data: CardData): HTMLDivElement {
+    private createElem(data: Blockchain): HTMLDivElement {
         const wrapper = document.createElement('div');
         const top = document.createElement('div');
         const bottom = document.createElement('div');
@@ -44,6 +44,7 @@ export default class Card extends BaseView {
         buy.className = 'card__buy';
         castBody.className = 'card__cast_data'
 
+        wrapper.setAttribute('id', data.name);
         img.src = data.iconUrl;
         name.textContent = data.name;
         description.textContent = data.description;
@@ -65,7 +66,7 @@ export default class Card extends BaseView {
         return wrapper;
     }
 
-    private createTariffs(data: CardData): HTMLDivElement {
+    private createTariffs(data: Blockchain): HTMLDivElement {
         const tarrifs = document.createElement('div');
         const head = document.createElement('div');
         const body = document.createElement('div');

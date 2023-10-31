@@ -1,4 +1,4 @@
-type CardData = {
+type Blockchain = {
     name: string,
     iconUrl: string,
     description: string,
@@ -13,7 +13,7 @@ type Tariff = {
     link: string
 }
 
-const cardsMockResponse: CardData [] = [
+const blockchainsMockResponse: Blockchain [] = [
     {
         name: 'StarkNet',
         iconUrl: './img/tokens/starknet.png',
@@ -248,45 +248,6 @@ const cardsMockResponse: CardData [] = [
             }
         ]
     },
-    {
-        name: 'Venom Foundation',
-        iconUrl: './img/tokens/venom-foundation.png',
-        description: "Venom Blockchain is built on the Threaded Virtual Machine (TVM). TVM provides a highly efficient and scalable way to handle account interactions in the Venom Blockchain. By utilizing the Actor model, TVM can isolate and parallelize actors, allowing for the efficient handling of complex distributed systems.",
-        expectedDrop: '$500 - $5 000',
-        probability: '65%',
-        tarrifs: [
-            {
-                accounts: 5,
-                cost: 150,
-                link: '#'
-            },
-            {
-                accounts: 10,
-                cost: 300,
-                link: '#'
-            },
-            {
-                accounts: 15,
-                cost: 450,
-                link: '#'
-            },
-            {
-                accounts: 20,
-                cost: 600,
-                link: '#'
-            },
-            {
-                accounts: 25,
-                cost: 750,
-                link: '#'
-            },
-            {
-                accounts: 30,
-                cost: 900,
-                link: '#'
-            }
-        ]
-    },
 ];
 
-export { cardsMockResponse, CardData };
+export { Blockchain, blockchainsMockResponse };

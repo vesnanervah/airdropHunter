@@ -17,3 +17,19 @@ By interviewer was given stack of vanillaJS(???) and Bootstrap4(???)...*But sinc
 ## Deploy
 
 You can view deploy of the app [here](https://vesnanervah.github.io/airdropHunter/dist/index.html).
+
+## Features
+
+- Infinite carousel of blockchains with smooth scroll to their cards in cards block bellow
+- News block with slider and tray
+- Adaptive down to 390px
+
+## TODO's: 
+
+- Gesture input of blockchains carousel
+
+- Gesture input of news block
+
+- Read more button inside of news
+
+- Modal popup of full news text after read more clicked

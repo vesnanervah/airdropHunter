@@ -1,6 +1,6 @@
 import './carousel-block.scss';
 import { BaseView } from "../../base-view/base-view";
-import { blockchainItems } from "./blockchain-items";
+import { blockchainsMockResponse } from '../../data/blockchains';
 
 export default class CarouselBlock extends BaseView {
     private carouselItems: HTMLElement[] = [];
@@ -52,8 +52,8 @@ export default class CarouselBlock extends BaseView {
     private createCarouselItems(): HTMLDivElement {
         const wrapper = document.createElement('div');
         wrapper.className = 'carousel-block__items';
-        blockchainItems.forEach((item) => {
-            const itemElem = this.createCarouselItem(item.hrefId, item.imgSrc);
+        blockchainsMockResponse.forEach((item) => {
+            const itemElem = this.createCarouselItem(item.name, item.iconUrl);
             wrapper.appendChild(itemElem);
             this.carouselItems.push(itemElem);
         });
@@ -62,28 +62,38 @@ export default class CarouselBlock extends BaseView {
 
     private createCarouselItem(hrefId: string, imgSrc: string): HTMLElement {
         const wrapper = document.createElement('span');
-        const ref = document.getElementById(hrefId);
         const img = new Image();
         wrapper.className = 'carousel-block__item';
         img.className = 'carousel-block__img';
         img.src = imgSrc;
         wrapper.addEventListener('click', () => {
-            this.handleCarouselItemClick(ref);
+            this.handleCarouselItemClick(hrefId);
         });
+        wrapper.dataset.name = hrefId;
         wrapper.appendChild(img);
         return wrapper;
     }
 
-    private handleCarouselItemClick(refElem: HTMLElement) {
-        // smooth scroll
+    private handleCarouselItemClick(hrefId: string) {
+        const ref = document.getElementById(hrefId);
+        if (ref) {
+            window.scrollTo({
+                top: ref.getBoundingClientRect().top + window.scrollY - 25,
+                behavior: 'smooth'
+            });
+            this.animateScroll(ref);
+        } ;
     }
 
-    //proper carousel work requires one more element inside, than user can view.
+    //proper work of carousel requires one more element inside, than user can view.
     private fillCarousel(index = 0) {
         if (this.itemsListContainer.offsetWidth + this.carouselItems[0].offsetWidth  >= this.itemsList.scrollWidth) {
-            const clone = this.carouselItems[index].cloneNode(true);
-            this.carouselItems.push(clone as HTMLElement);
-            this.itemsList.appendChild(clone);
+            if (this.carouselItems[index].dataset.name !== this.carouselItems[this.carouselItems.length - 1].dataset.name) { //filter same items
+                const clone = this.carouselItems[index].cloneNode(true) as HTMLElement;
+                clone.addEventListener('click', () => this.handleCarouselItemClick(clone.dataset.name));
+                this.carouselItems.push(clone as HTMLElement);
+                this.itemsList.appendChild(clone);
+            }
             this.fillCarousel(this.carouselItems[index + 1] ? index + 1 : 0);
         }
     }
@@ -133,5 +143,20 @@ export default class CarouselBlock extends BaseView {
             cb();
             this.isAvailable = true;
         };
+    }
+
+    private animateScroll(elem: HTMLElement) {
+        // TODO: custom scroll and more complex animation
+        elem.animate([
+            {transform: 'scale(1.0)'},
+            {transform: 'scale(1.12)'},
+            {transform: 'scale(1.08)'},
+            {transform: 'scale(1.06)'},
+            {transform: 'scale(1.04)'},
+            {transform: 'scale(1.02)'},
+            {transform: 'scale(1.01)'},
+        ], {
+            duration: 600
+        })
     }
 }
