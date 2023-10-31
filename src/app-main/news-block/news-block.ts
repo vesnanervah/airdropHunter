@@ -8,6 +8,8 @@ export default class NewsBlock extends BaseView {
     private sliderChildrens: NewsItem[] = [];
     private sliderPos = 0;
     private maxSliderPos = newsMockResponse.length - 1;
+    private touchStart: number | undefined;
+    private TOUCH_TO_SWIPE = 180;
 
     constructor() {
         super();
@@ -20,7 +22,6 @@ export default class NewsBlock extends BaseView {
         const tray = this.createTray(wrapper);
 
         wrapper.append(tray, main);
-
 
         return wrapper
     }
@@ -73,9 +74,15 @@ export default class NewsBlock extends BaseView {
         main.append(left, right);
 
         trayBtn.addEventListener('click', () => this.trayBlock(wrapper));
+        trayBtn.addEventListener('touchend', () => this.trayBlock(wrapper));
         nextBtn.addEventListener('click', () => this.handleNextClick(newsList, prevBtn, nextBtn));
         prevBtn.addEventListener('click', () => this.handlePrevClick(newsList, prevBtn, nextBtn));
         window.addEventListener('resize', () => this.moveSlider(newsList));    
+        main.addEventListener('touchstart', (event: TouchEvent) => this.handleTouchStart(event));
+        main.addEventListener('touchend', (event: TouchEvent) => { 
+            this.handleTouchEnd(event, newsList);
+            this.onMoveEnd(prevBtn, nextBtn);
+        });
 
         return main;
     }
@@ -124,6 +131,26 @@ export default class NewsBlock extends BaseView {
     private moveSlider(movingElem: HTMLDivElement) {
         const move = this.sliderChildrens[0].getView().offsetWidth;
         movingElem.style.transform = `translateX(-${move * this.sliderPos}px)`;
+    }
+
+    private handleTouchStart(event: TouchEvent) {
+        event.preventDefault();
+        this.touchStart = event.touches[0].screenX;
+    }
+
+    private handleTouchEnd(event: TouchEvent, movingElem: HTMLDivElement) {
+        event.preventDefault();
+        const delta = event.changedTouches[0].screenX - this.touchStart;
+        console.log(delta);
+        if (delta > this.TOUCH_TO_SWIPE &&  this.sliderPos > 0) {
+            this.sliderPos -= 1;
+            this.moveSlider(movingElem);
+        }
+        if ((delta * -1) > this.TOUCH_TO_SWIPE &&  this.sliderPos < this.maxSliderPos) {
+            this.sliderPos += 1;
+            this.moveSlider(movingElem);
+        }
+
     }
 
 }
