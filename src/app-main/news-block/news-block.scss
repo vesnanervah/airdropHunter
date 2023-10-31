@@ -99,6 +99,10 @@
             font-size: 19px;
             line-height: 28px;
         }
+
+        @media (max-width:460px){
+           width: 320px;
+        }
     }
 
     .news-block__date {

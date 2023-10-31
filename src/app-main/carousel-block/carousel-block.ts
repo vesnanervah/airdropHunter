@@ -74,9 +74,6 @@ export default class CarouselBlock extends BaseView {
 
     //proper carousel work requires one more element inside, than user can view.
     private fillCarousel(index = 0) {
-        console.log(index);
-        console.log(`container scroll is ${this.itemsListContainer.scrollWidth}`);
-        console.log()
         if (this.itemsListContainer.offsetWidth + this.carouselItems[0].offsetWidth >= this.itemsList.scrollWidth) {
             const clone = this.carouselItems[index].cloneNode(true);
             this.itemsList.appendChild(clone);
