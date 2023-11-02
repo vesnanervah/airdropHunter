@@ -22,13 +22,12 @@ You can view deploy of the app [here](https://vesnanervah.github.io/airdropHunte
 
 - Infinite carousel of blockchains with smooth scroll to their cards in cards block bellow
 - News block with slider and tray
+- Touch news block input
 - Adaptive down to 390px
 
 ## TODO's: 
 
 - Gesture input of blockchains carousel
-
-- Gesture input of news block
 
 - Read more button inside of news
 
