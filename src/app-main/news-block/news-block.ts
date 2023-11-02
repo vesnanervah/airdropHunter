@@ -9,7 +9,9 @@ export default class NewsBlock extends BaseView {
     private sliderPos = 0;
     private maxSliderPos = newsMockResponse.length - 1;
     private touchStart: number | undefined;
-    private TOUCH_TO_SWIPE = 180;
+    private TOUCH_TO_SWIPE = 80;
+    private preSwipeMove = 0;
+    private preSwipedElem: HTMLElement | undefined;
 
     constructor() {
         super();
@@ -79,6 +81,7 @@ export default class NewsBlock extends BaseView {
         prevBtn.addEventListener('click', () => this.handlePrevClick(newsList, prevBtn, nextBtn));
         window.addEventListener('resize', () => this.moveSlider(newsList));    
         main.addEventListener('touchstart', (event: TouchEvent) => this.handleTouchStart(event));
+        window.addEventListener('touchmove', (event: TouchEvent) => this.handleTouchMove(event));
         main.addEventListener('touchend', (event: TouchEvent) => { 
             this.handleTouchEnd(event, newsList);
             this.onMoveEnd(prevBtn, nextBtn);
@@ -134,14 +137,45 @@ export default class NewsBlock extends BaseView {
     }
 
     private handleTouchStart(event: TouchEvent) {
-        event.preventDefault();
         this.touchStart = event.touches[0].screenX;
+    }
+
+    private handleTouchMove(event: TouchEvent) {
+        const delta = event.touches[0].screenX - this.touchStart;
+        if ((delta <= 0 && this.sliderPos === this.maxSliderPos) || (delta >= 0 && this.sliderPos === 0)) {
+            return; //filter events when swipe in directions where no items left
+        }
+        console.log(delta);
+        const movingItem = delta < 0 ? this.sliderChildrens[this.sliderPos + 1] : this.sliderChildrens[this.sliderPos - 1];
+        delta < this.preSwipeMove ? this.animatePreSwipeLeft(delta, movingItem.getView()) : this.animatePreSwipeRight(delta, movingItem.getView());
+        this.blurItem(this.sliderChildrens[this.sliderPos].getView());
+        this.preSwipedElem = movingItem.getView();
+    }
+
+    private animatePreSwipeLeft(delta: number, movingElem: HTMLElement) {
+        if (delta < this.preSwipeMove - 5 && delta > -300) {
+            this.preSwipeMove -= 5;
+            movingElem.style.transform = `translateX(${this.preSwipeMove}px)`; 
+        }
+    }
+
+    private animatePreSwipeRight(delta: number, movingElem: HTMLElement) {
+        if (delta > this.preSwipeMove + 5 && delta < 300) {
+            this.preSwipeMove += 5;
+            movingElem.style.transform = `translateX(${this.preSwipeMove * 2}px)`;
+            movingElem.style.zIndex = '2';
+        }
+    }
+
+    private blurItem(item: HTMLElement) {
+        item.style.opacity = '0.25';
     }
 
     private handleTouchEnd(event: TouchEvent, movingElem: HTMLDivElement) {
         event.preventDefault();
+        
         const delta = event.changedTouches[0].screenX - this.touchStart;
-        console.log(delta);
+        const swiped = this.sliderChildrens[this.sliderPos];
         if (delta > this.TOUCH_TO_SWIPE &&  this.sliderPos > 0) {
             this.sliderPos -= 1;
             this.moveSlider(movingElem);
@@ -150,7 +184,11 @@ export default class NewsBlock extends BaseView {
             this.sliderPos += 1;
             this.moveSlider(movingElem);
         }
-
+        swiped.getView().style.opacity = '1';
+        if (this.preSwipedElem) {
+            this.preSwipedElem.style.transform = 'translateX(0px)';
+            this.preSwipedElem.style.zIndex = '1';
+        }
     }
 
 }
