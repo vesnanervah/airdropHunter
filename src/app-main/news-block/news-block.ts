@@ -1,6 +1,6 @@
 import './news-block.scss';
 import { BaseView } from "../../base-view/base-view";
-import { newsMockResponse, NewsData } from "./news-data";
+import { newsMockResponse } from "./news-data";
 import NewsItem from "./news/news-item";
 
 export default class NewsBlock extends BaseView {
@@ -9,7 +9,7 @@ export default class NewsBlock extends BaseView {
     private sliderPos = 0;
     private maxSliderPos = newsMockResponse.length - 1;
     private touchStart: number | undefined;
-    private TOUCH_TO_SWIPE = 80;
+    private TOUCH_TO_SWIPE = 100;
     private preSwipeMove = 0;
     private preSwipedElem: HTMLElement | undefined;
 
@@ -142,10 +142,15 @@ export default class NewsBlock extends BaseView {
 
     private handleTouchMove(event: TouchEvent) {
         const delta = event.touches[0].screenX - this.touchStart;
-        if ((delta <= 0 && this.sliderPos === this.maxSliderPos) || (delta >= 0 && this.sliderPos === 0)) {
+        console.log(delta)
+        if ((delta < 0 && this.sliderPos === this.maxSliderPos) || (delta > 0 && this.sliderPos === 0)) {
             return; //filter events when swipe in directions where no items left
         }
-        console.log(delta);
+        if (delta === 0 && this.preSwipedElem) {
+            this.preSwipedElem.style.transform = 'translateX(0px)'; //case when user draged to one direction then while still holding touch draged to other direction
+            return
+        }
+
         const movingItem = delta < 0 ? this.sliderChildrens[this.sliderPos + 1] : this.sliderChildrens[this.sliderPos - 1];
         delta < this.preSwipeMove ? this.animatePreSwipeLeft(delta, movingItem.getView()) : this.animatePreSwipeRight(delta, movingItem.getView());
         this.blurItem(this.sliderChildrens[this.sliderPos].getView());
@@ -153,22 +158,23 @@ export default class NewsBlock extends BaseView {
     }
 
     private animatePreSwipeLeft(delta: number, movingElem: HTMLElement) {
-        if (delta < this.preSwipeMove - 5 && delta > -300) {
-            this.preSwipeMove -= 5;
+        if (delta < this.preSwipeMove - 10 && delta > -300) {
+            movingElem.style.zIndex = `3`
+            this.preSwipeMove -= 10;
             movingElem.style.transform = `translateX(${this.preSwipeMove}px)`; 
         }
     }
 
     private animatePreSwipeRight(delta: number, movingElem: HTMLElement) {
-        if (delta > this.preSwipeMove + 5 && delta < 300) {
-            this.preSwipeMove += 5;
-            movingElem.style.transform = `translateX(${this.preSwipeMove * 2}px)`;
-            movingElem.style.zIndex = '2';
+        if (delta > this.preSwipeMove + 10 && delta < 300) {
+            this.preSwipeMove += 10;
+            movingElem.style.transform = `translateX(${this.preSwipeMove}px)`;
+            movingElem.style.zIndex = '3';
         }
     }
 
     private blurItem(item: HTMLElement) {
-        item.style.opacity = '0.25';
+        item.style.opacity = '0.20';
     }
 
     private handleTouchEnd(event: TouchEvent, movingElem: HTMLDivElement) {
@@ -187,7 +193,7 @@ export default class NewsBlock extends BaseView {
         swiped.getView().style.opacity = '1';
         if (this.preSwipedElem) {
             this.preSwipedElem.style.transform = 'translateX(0px)';
-            this.preSwipedElem.style.zIndex = '1';
+            this.preSwipedElem.style.zIndex = '';
         }
     }
 

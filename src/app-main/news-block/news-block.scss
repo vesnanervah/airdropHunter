@@ -7,7 +7,7 @@
     box-shadow: $block-shadow;
     box-sizing: border-box;
     height: 400px;
-    transition: height 10ms;
+    transition: height 200ms;
 
     .news-block__main {
         display: grid;
@@ -69,6 +69,7 @@
     .news-block__news-item {
         width: 600px;
         overflow: hidden;
+        position: relative;
         transition: transform 100ms;
 
         @media (min-width:1200px) and (max-width: 1400px) {
