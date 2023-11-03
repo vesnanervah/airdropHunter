@@ -71,6 +71,9 @@
         overflow: hidden;
         position: relative;
         transition: transform 100ms;
+        &.slow-transition {
+            transition: transform 10ms;
+        }
 
         @media (min-width:1200px) and (max-width: 1400px) {
             width: 504px;

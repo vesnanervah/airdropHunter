@@ -10,8 +10,10 @@ export default class NewsBlock extends BaseView {
     private maxSliderPos = newsMockResponse.length - 1;
     private touchStart: number | undefined;
     private TOUCH_TO_SWIPE = 100;
+    private TOUCH_TO_PRESWIPE = 10;
     private preSwipeMove = 0;
     private preSwipedElem: HTMLElement | undefined;
+    private swipeStarted = false;
 
     constructor() {
         super();
@@ -142,35 +144,44 @@ export default class NewsBlock extends BaseView {
 
     private handleTouchMove(event: TouchEvent) {
         const delta = event.touches[0].screenX - this.touchStart;
-        console.log(delta)
-        if ((delta < 0 && this.sliderPos === this.maxSliderPos) || (delta > 0 && this.sliderPos === 0)) {
-            return; //filter events when swipe in directions where no items left
-        }
-        if (delta === 0 && this.preSwipedElem) {
-            this.preSwipedElem.style.transform = 'translateX(0px)'; //case when user draged to one direction then while still holding touch draged to other direction
+        if (delta > 300 || (delta * -1) > 300) {
+            console.log('endpoint reached. do nothing');
             return
         }
+        else if ((delta * -1) > this.TOUCH_TO_PRESWIPE && this.sliderPos !== this.maxSliderPos) {
+            this.swipeStarted = true;
+            this.blurItem(this.sliderChildrens[this.sliderPos].getView());
+            if  (!this.preSwipedElem ) {
+                this.preSwipedElem = this.sliderChildrens[this.sliderPos + 1].getView();
+                this.preSwipedElem.classList.add('slow-transition');
+            }
+            this.animatePreSwipe(delta);
+        } else if (delta > this.TOUCH_TO_PRESWIPE && this.sliderPos !== 0){ 
+            this.swipeStarted = true;
+            this.blurItem(this.sliderChildrens[this.sliderPos].getView());
+            if  (!this.preSwipedElem ) {
+                this.preSwipedElem = this.sliderChildrens[this.sliderPos - 1].getView();
+                this.preSwipedElem.classList.add('slow-transition');
+            }
+            this.animatePreSwipe(delta);
+        }
+         else {  //case when user draged to one direction then reached zero delta by draging to the other side
+            this.swipeStarted = false;
+            this.resetPreSwiped();
+        }
 
-        const movingItem = delta < 0 ? this.sliderChildrens[this.sliderPos + 1] : this.sliderChildrens[this.sliderPos - 1];
-        delta < this.preSwipeMove ? this.animatePreSwipeLeft(delta, movingItem.getView()) : this.animatePreSwipeRight(delta, movingItem.getView());
-        this.blurItem(this.sliderChildrens[this.sliderPos].getView());
-        this.preSwipedElem = movingItem.getView();
+
     }
 
-    private animatePreSwipeLeft(delta: number, movingElem: HTMLElement) {
-        if (delta < this.preSwipeMove - 10 && delta > -300) {
-            movingElem.style.zIndex = `3`
-            this.preSwipeMove -= 10;
-            movingElem.style.transform = `translateX(${this.preSwipeMove}px)`; 
+    private animatePreSwipe(delta:number) {
+        if (delta > this.preSwipeMove + this.TOUCH_TO_PRESWIPE) {
+            this.preSwipeMove += this.TOUCH_TO_PRESWIPE;
         }
-    }
-
-    private animatePreSwipeRight(delta: number, movingElem: HTMLElement) {
-        if (delta > this.preSwipeMove + 10 && delta < 300) {
-            this.preSwipeMove += 10;
-            movingElem.style.transform = `translateX(${this.preSwipeMove}px)`;
-            movingElem.style.zIndex = '3';
+        if (delta < this.preSwipeMove - this.TOUCH_TO_PRESWIPE) {
+            this.preSwipeMove -= this.TOUCH_TO_PRESWIPE;
         }
+        this.preSwipedElem.style.zIndex = `3`
+        this.preSwipedElem.style.transform = `translateX(${this.preSwipeMove}px)`; 
     }
 
     private blurItem(item: HTMLElement) {
@@ -178,23 +189,40 @@ export default class NewsBlock extends BaseView {
     }
 
     private handleTouchEnd(event: TouchEvent, movingElem: HTMLDivElement) {
-        event.preventDefault();
-        
         const delta = event.changedTouches[0].screenX - this.touchStart;
-        const swiped = this.sliderChildrens[this.sliderPos];
-        if (delta > this.TOUCH_TO_SWIPE &&  this.sliderPos > 0) {
-            this.sliderPos -= 1;
-            this.moveSlider(movingElem);
+        this.sliderChildrens[this.sliderPos].getView().style.opacity = '1';
+        if (!this.swipeStarted) {
+            return;
         }
-        if ((delta * -1) > this.TOUCH_TO_SWIPE &&  this.sliderPos < this.maxSliderPos) {
-            this.sliderPos += 1;
-            this.moveSlider(movingElem);
+        if (delta > this.TOUCH_TO_SWIPE) {
+            this.swipeNewsLeft(movingElem);
         }
-        swiped.getView().style.opacity = '1';
-        if (this.preSwipedElem) {
-            this.preSwipedElem.style.transform = 'translateX(0px)';
-            this.preSwipedElem.style.zIndex = '';
+
+        if ((delta * -1) > this.TOUCH_TO_SWIPE) {
+            this.swipeNewsRight(movingElem)
         }
+        this.swipeStarted = false;
+        this.resetPreSwiped();
     }
 
+
+    private swipeNewsLeft(movingElem: HTMLDivElement) {
+        this.sliderPos -= 1;
+        this.moveSlider(movingElem);
+    }
+
+    private swipeNewsRight(movingElem: HTMLDivElement) {
+        this.sliderPos += 1;
+        this.moveSlider(movingElem);
+    }
+
+    private resetPreSwiped() {
+        if (this.preSwipedElem) {
+            this.preSwipedElem.classList.remove('slow-transition');
+            this.preSwipedElem.style.transform = 'translateX(0px)';
+            this.preSwipedElem.style.zIndex = '';
+            this.preSwipedElem = undefined;
+            this.preSwipeMove = 0;
+        }
+    }
 }
