@@ -82,9 +82,9 @@ export default class NewsBlock extends BaseView {
         nextBtn.addEventListener('click', () => this.handleNextClick(newsList, prevBtn, nextBtn));
         prevBtn.addEventListener('click', () => this.handlePrevClick(newsList, prevBtn, nextBtn));
         window.addEventListener('resize', () => this.moveSlider(newsList));    
-        main.addEventListener('touchstart', (event: TouchEvent) => this.handleTouchStart(event));
-        window.addEventListener('touchmove', (event: TouchEvent) => this.handleTouchMove(event));
-        main.addEventListener('touchend', (event: TouchEvent) => { 
+        listWrapper.addEventListener('touchstart', (event: TouchEvent) => this.handleTouchStart(event));
+        listWrapper.addEventListener('touchmove', (event: TouchEvent) => this.handleTouchMove(event));
+        listWrapper.addEventListener('touchend', (event: TouchEvent) => { 
             this.handleTouchEnd(event, newsList);
             this.onMoveEnd(prevBtn, nextBtn);
         });
@@ -139,10 +139,12 @@ export default class NewsBlock extends BaseView {
     }
 
     private handleTouchStart(event: TouchEvent) {
+        event.preventDefault();
         this.touchStart = event.touches[0].screenX;
     }
 
     private handleTouchMove(event: TouchEvent) {
+        event.preventDefault();
         const delta = event.touches[0].screenX - this.touchStart;
         if (delta > 300 || (delta * -1) > 300) {
             console.log('endpoint reached. do nothing');
@@ -189,6 +191,7 @@ export default class NewsBlock extends BaseView {
     }
 
     private handleTouchEnd(event: TouchEvent, movingElem: HTMLDivElement) {
+        event.preventDefault();
         const delta = event.changedTouches[0].screenX - this.touchStart;
         this.sliderChildrens[this.sliderPos].getView().style.opacity = '1';
         if (!this.swipeStarted) {
