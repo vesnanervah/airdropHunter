@@ -77,7 +77,7 @@
         position: relative;
         transition: transform 100ms;
         &.slow-transition {
-            transition: transform 10ms;
+            transition: transform 30ms;
         }
 
         @media (min-width:1200px) and (max-width: 1400px) {
